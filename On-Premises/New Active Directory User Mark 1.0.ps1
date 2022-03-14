@@ -13,5 +13,5 @@ $lastname = Read-Host "Last name?"
 $username = "$firstname.$lastname"
 
 #Acctual Command
-
+Get-Credential
 New-aduser -name ("$firstname") -displayname ("$username") -Accountpassword (Read-Host -AsSecureString "AccountPassword") -Enabled $true
