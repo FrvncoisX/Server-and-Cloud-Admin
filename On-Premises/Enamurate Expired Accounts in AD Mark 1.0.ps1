@@ -4,7 +4,7 @@ $date = $date.AddDays(6)
 $begdate = Get-Date -date $date -Format "MMM d"
 $dateadd = $date.adddays(31) -as [datetime]
 $enddate = Get-Date -date $dateadd -Format "MMM d"
-$piece="`n2"
+$delacc = $expireds | fl name 
 
 Function get-expired
 {$expireds = Search-ADAccount -AccountExpired | where {$_.Enabled -eq $true} | 
@@ -37,7 +37,9 @@ fl Name, AccountExpirationdate, Enabled, Manager
 
 
 Function delete-expacc
-{}
+{
+    get-expired | Read-Host "would you like to disable these accounts $delacc"  Disable-ADAccount
+}
 function Show-Menu {
 param (
 [string]$Title = 'Expired Account Menu'
@@ -45,10 +47,10 @@ param (
 Clear-Host
 Write-Host "================ $Title ================"
                                     
-Write-Host "1: Press '1' To Generate Accounts That Have Expired in the Past 24HRS."
+Write-Host "1: Press '1' To Generate Accounts That Have Expired."
 Write-Host "2: Press '2' To Generate Accounts That will Be Expiring In The Next 31 Days."
 Write-Host "3: Press '3' To Delete Expired Accounts."
- Write-Host "Q: Press 'Q' to quit."
+Write-Host "Q: Press 'Q' to quit."
                                 }
 
 do
