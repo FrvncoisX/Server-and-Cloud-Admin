@@ -6,9 +6,14 @@ $dateadd = $date.adddays(31) -as [datetime]
 $enddate = Get-Date -date $dateadd -Format "MMM d"
 $delacc = $expireds | Out-String
 $users = $expireds#>
+#
+#
+#
+#
+#This Script is a GUI to manage accounts that have expired
+
 
 $Cred = Get-Credential -Credential adatum\Administrator
-$moveToDis = "$target,DC=adatum,DC=com"
 
 
 #Funtion for expired accounts
@@ -68,26 +73,7 @@ if ($disacc -eq $null){
 }
 }
 
-#Funtion to Move Disabled accounts to new OU
-Function Move-Disacc 
-{$target= read-host "Enter the Name of the OU to use to"}
-{$move = Search-ADAccount -AccountDisabled -Usersonly | where {$_.distinguishedname -notlike '*OU=DisabledUsers*'} |
-Select Name,Distinguishedname
-if ($move -eq $null){
-Write-Host "There are no accounts to move."
-     }else
-    {$move|foreach { 
- Move-ADObject -Identity $_.DistinguishedName -TargetPath $moveToDis
-  }
-write-host "The following accounts have been Moved "
-$move | Out-String
-  }
- 
-        
 
-  }
-  
-  
 
 
 
@@ -116,7 +102,7 @@ Write-Host "2: Press '2' To Generate Accounts That will Be Expiring In The Next 
 Write-Host "3: Press '3' To Disable Expired Accounts."
 Write-Host "Q: Press 'Q' to quit."
 Write-Host "======================================================"                              
-                            
+                              
 }
 
 do
@@ -128,7 +114,10 @@ switch ($selectionx)
 {
 '1' {get-expired} 
 '2' {get-expiring} 
-'3' {show-Menux}
+'3' {show-Menux 
+
+
+}
 }
 pause
 }
@@ -140,22 +129,15 @@ param (
 [string]$Title2 = 'Disable Accounts'
 )
 clear-host
-Get-expired  
 Write-Host "================ $Title2 ================"
-Write-Host "1: Press '1' To Disable The Expired Accounts."
-Write-Host "1: Press '2' To Move The Disabled Account."
-Write-Host "1: Press '3' To Remove accounts from security group except Domain Users Group."
-Write-Host "1: Press '5' To Disable User Accounts That Have Not Logon In the past 30 days."
-write-Host "Q: Press 'Q' to quit"
+Write-Host "1: Press '1' To Disable These Accounts."
+write-Host "Q: Press '2' to quit"
 Write-Host "======================================================"
  $selectionz= Read-Host "Please make a selection"
  switch ($selectionz)
   {
  '1' {disable-expacc}
- '2' {Move-Disacc}
- '3' {Remove-SecurityGroup}
- 
- '4' {Show-Menu }
+ '2' {Show-Menu }
   
  } 
  }
